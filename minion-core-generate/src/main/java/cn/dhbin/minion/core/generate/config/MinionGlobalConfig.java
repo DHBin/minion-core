@@ -34,5 +34,10 @@ public class MinionGlobalConfig extends GlobalConfig {
      */
     private String frontPath = rootPath + "/front/src";
 
+    /**
+     * sql文件路径
+     */
+    private String sqlPath = rootPath + "/sql";
+
 
 }

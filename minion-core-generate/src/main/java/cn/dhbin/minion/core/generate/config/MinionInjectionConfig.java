@@ -30,6 +30,8 @@ public class MinionInjectionConfig extends InjectionConfig {
         fileOutConfigs.add(new ApiJsFileOutConfig(globalConfig, packageConfig));
         fileOutConfigs.add(new ConstJsFileOutConfig(globalConfig, packageConfig));
         fileOutConfigs.add(new ViewVueFileOutConfig(globalConfig, packageConfig));
+        // sql文件
+        fileOutConfigs.add(new SqlDataFileOutConfig(globalConfig, packageConfig));
         setFileOutConfigList(fileOutConfigs);
     }
 

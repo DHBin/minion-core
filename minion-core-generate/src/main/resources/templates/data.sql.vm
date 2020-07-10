@@ -1,0 +1,15 @@
+-- 主键id根据自己的项目情况填入
+-- 修改“父父编号”，上一级菜单num
+-- 替换全部“父编号”
+insert into SYS_MENU
+VALUES ('菜单id', '$!{table.comment}', '$!{table.comment}', '2', '$!{firstLowerEntityName}', 'views/$!{package.ModuleName}/$!{firstLowerEntityName}',
+        'el-icon-s-tools', '父编号', '父父编号', '父编号', '$!{currentTime}', null, 1, 1);
+insert into SYS_MENU
+VALUES ('新增按钮id', '新增$!{table.comment}', '新增$!{table.comment}', '3', '', '', '', '父编号1', '父编号', '父编号1', '$!{currentTime}',
+        null, 1, 1);
+insert into SYS_MENU
+VALUES ('更新按钮id', '更新$!{table.comment}', '更新$!{table.comment}', '3', '', '', '', '父编号2', '父编号', '父编号2', '$!{currentTime}',
+        null, 1, 1);
+insert into SYS_MENU
+VALUES ('删除按钮id', '删除$!{table.comment}', '删除$!{table.comment}', '3', '', '', '', '父编号3', '父编号', '父编号3', '$!{currentTime}',
+        null, 1, 1);
