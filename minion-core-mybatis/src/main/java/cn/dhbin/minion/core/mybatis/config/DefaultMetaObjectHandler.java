@@ -23,17 +23,29 @@ public class DefaultMetaObjectHandler implements MetaObjectHandler {
     @Override
     public void insertFill(MetaObject metaObject) {
         final Long uid = userInfo.getUid();
-        strictInsertFill(metaObject, CREATE_TIME, LocalDateTime.class, LocalDateTime.now());
-        strictInsertFill(metaObject, CREATE_UID, Long.class, uid);
-        strictInsertFill(metaObject, UPDATE_TIME, LocalDateTime.class, LocalDateTime.now());
-        strictInsertFill(metaObject, UPDATE_UID, Long.class, uid);
+        strictInsertFillIfAbsent(metaObject, CREATE_TIME, LocalDateTime.class, LocalDateTime.now());
+        strictInsertFillIfAbsent(metaObject, CREATE_UID, Long.class, uid);
+        strictInsertFillIfAbsent(metaObject, UPDATE_TIME, LocalDateTime.class, LocalDateTime.now());
+        strictInsertFillIfAbsent(metaObject, UPDATE_UID, Long.class, uid);
     }
 
     @Override
     public void updateFill(MetaObject metaObject) {
         final Long uid = userInfo.getUid();
-        strictUpdateFill(metaObject, UPDATE_TIME, LocalDateTime.class, LocalDateTime.now());
-        strictUpdateFill(metaObject, UPDATE_UID, Long.class, uid);
+        strictUpdateFillIfAbsent(metaObject, UPDATE_TIME, LocalDateTime.class, LocalDateTime.now());
+        strictUpdateFillIfAbsent(metaObject, UPDATE_UID, Long.class, uid);
+    }
+
+    private <T> void strictInsertFillIfAbsent(MetaObject metaObject, String fieldName, Class<T> fieldType, Object fieldVal) {
+        if (metaObject.hasGetter(fieldName)) {
+            strictInsertFill(metaObject, fieldName, fieldType, fieldVal);
+        }
+    }
+
+    private <T> void strictUpdateFillIfAbsent(MetaObject metaObject, String fieldName, Class<T> fieldType, Object fieldVal) {
+        if (metaObject.hasGetter(fieldName)) {
+            strictUpdateFill(metaObject, fieldName, fieldType, fieldVal);
+        }
     }
 
 }
