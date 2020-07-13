@@ -14,6 +14,9 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.Authorization;
 import lombok.RequiredArgsConstructor;
+#if(${useSpringSecurityAnnotation})
+import org.springframework.security.access.prepost.PreAuthorize;
+#end
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -61,6 +64,9 @@ private final $!{table.entityName}Service $!{firstLowerServiceName};
 */
 @GetMapping
 @ApiOperation(value = "分页获取 $!{table.comment}", authorizations = @Authorization("$!{table.name}_page"))
+#if(${useSpringSecurityAnnotation})
+@PreAuthorize("hasAuthority('$!{table.name}_page')")
+#end
 public ApiResponse<?> page(PageModel<$!{table.entityName}> pageModel, $!{table.entityName}Query query){
         IPage<$!{table.entityName}Dto> record=this.$!{firstLowerServiceName}
         .page(pageModel.convert(),Wrappers.lambdaQuery(query.convert($!{table.entityName}.class)))
@@ -73,6 +79,9 @@ public ApiResponse<?> page(PageModel<$!{table.entityName}> pageModel, $!{table.e
 */
 @PostMapping
 @ApiOperation(value = "新建$!{table.comment}", authorizations = @Authorization("$!{table.name}_create"))
+#if(${useSpringSecurityAnnotation})
+@PreAuthorize("hasAuthority('$!{table.name}_create')")
+#end
 public ApiResponse<?> create(@Validated @RequestBody $!{table.entityName}Param param){
         param.setId(null);
         this.$!{firstLowerServiceName}.save(param.convert($!{table.entityName}.class));
@@ -84,6 +93,9 @@ public ApiResponse<?> create(@Validated @RequestBody $!{table.entityName}Param p
  */
 @DeleteMapping("{id:\\d+}")
 @ApiOperation(value = "删除$!{table.comment}", authorizations = @Authorization("$!{table.name}_delete"))
+#if(${useSpringSecurityAnnotation})
+@PreAuthorize("hasAuthority('$!{table.name}_delete')")
+#end
 public ApiResponse<?> delete(@PathVariable Long id){
         this.$!{firstLowerServiceName}.removeById(id);
         return noContent();
@@ -94,6 +106,9 @@ public ApiResponse<?> delete(@PathVariable Long id){
  */
 @PutMapping
 @ApiOperation(value = "更新$!{table.comment}", authorizations = @Authorization("$!{table.name}_update"))
+#if(${useSpringSecurityAnnotation})
+@PreAuthorize("hasAuthority('$!{table.name}_update')")
+#end
 public ApiResponse<?> update(@Validated @RequestBody $!{table.entityName}Param param){
         this.$!{firstLowerServiceName}.updateByIdAndReturn(param.convert($!{table.entityName}.class));
         return created();
@@ -106,6 +121,9 @@ public ApiResponse<?> update(@Validated @RequestBody $!{table.entityName}Param p
  */
 @GetMapping("{id:\\d+}")
 @ApiOperation(value = "通过id获取$!{table.comment}", authorizations = @Authorization("$!{table.name}_retrieve"))
+#if(${useSpringSecurityAnnotation})
+@PreAuthorize("hasAuthority('$!{table.name}_retrieve')")
+#end
 public ApiResponse<?> retrieve(@PathVariable("id") Long id){
         return ok(this.$!{firstLowerServiceName}.getById(id));
         }

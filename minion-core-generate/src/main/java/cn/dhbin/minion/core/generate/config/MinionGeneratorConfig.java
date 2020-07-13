@@ -1,5 +1,6 @@
 package cn.dhbin.minion.core.generate.config;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.generator.config.GlobalConfig;
 import com.baomidou.mybatisplus.generator.config.PackageConfig;
 import com.baomidou.mybatisplus.generator.config.StrategyConfig;
@@ -12,19 +13,18 @@ import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
  */
 public class MinionGeneratorConfig {
 
-    public static StrategyConfig strategyConfig() {
-        StrategyConfig strategyConfig = new StrategyConfig();
-        strategyConfig.setSuperEntityClass("cn.dhbin.minion.core.common.entity.BaseEntity");
+    public static MinionStrategyConfig strategyConfig() {
+        MinionStrategyConfig strategyConfig = new MinionStrategyConfig();
         strategyConfig.setSuperControllerClass("cn.dhbin.minion.core.restful.controller.RestfulController");
         strategyConfig.setSuperServiceClass("cn.dhbin.minion.core.mybatis.service.IMinionService");
         strategyConfig.setSuperServiceImplClass("cn.dhbin.minion.core.mybatis.service.MinionServiceImpl");
         strategyConfig.setSuperMapperClass("cn.dhbin.minion.core.mybatis.mapper.MinionMapper");
-        strategyConfig.setSuperEntityColumns("create_time", "update_time", "create_uid", "update_uid");
         strategyConfig.setControllerMappingHyphenStyle(false);
         strategyConfig.setEntityLombokModel(true);
         strategyConfig.setRestControllerStyle(true);
         strategyConfig.setNaming(NamingStrategy.underline_to_camel);
         strategyConfig.setColumnNaming(NamingStrategy.underline_to_camel);
+        strategyConfig.setSpringSecurityAnnotation(true);
         return strategyConfig;
     }
 
@@ -34,6 +34,7 @@ public class MinionGeneratorConfig {
         globalConfig.setSwagger2(true);
         globalConfig.setOpen(false);
         globalConfig.setAuthor(author);
+        globalConfig.setIdType(IdType.ASSIGN_ID);
         return globalConfig;
     }
 

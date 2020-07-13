@@ -1,6 +1,8 @@
 package cn.dhbin.minion.core.generate;
 
+import cn.dhbin.minion.core.generate.config.MinionStrategyConfig;
 import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.generator.config.builder.ConfigBuilder;
 import com.baomidou.mybatisplus.generator.config.po.TableInfo;
 import com.baomidou.mybatisplus.generator.engine.VelocityTemplateEngine;
 
@@ -25,6 +27,10 @@ public class MinionVelocityTemplateEngine extends VelocityTemplateEngine {
         objectMap.put("firstLowerServiceName", StrUtil.lowerFirst(tableInfo.getServiceName()));
         // 当前时间 yyyy-MM-dd hh:mm:ss
         objectMap.put("currentTime", formatter.format(LocalDateTime.now()));
+        ConfigBuilder config = getConfigBuilder();
+        MinionStrategyConfig strategyConfig = (MinionStrategyConfig) config.getStrategyConfig();
+        // 是否使用Spring Security注解鉴权
+        objectMap.put("useSpringSecurityAnnotation", strategyConfig.isSpringSecurityAnnotation());
         return objectMap;
     }
 

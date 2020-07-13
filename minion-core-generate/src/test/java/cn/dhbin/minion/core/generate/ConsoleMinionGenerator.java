@@ -3,6 +3,7 @@ package cn.dhbin.minion.core.generate;
 import cn.dhbin.minion.core.generate.config.MinionGeneratorConfig;
 import cn.dhbin.minion.core.generate.config.MinionGlobalConfig;
 import cn.dhbin.minion.core.generate.config.MinionInjectionConfig;
+import cn.dhbin.minion.core.generate.config.MinionStrategyConfig;
 import com.baomidou.mybatisplus.core.exceptions.MybatisPlusException;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.generator.AutoGenerator;
@@ -28,10 +29,10 @@ public class ConsoleMinionGenerator {
 
         // 数据源配置
         DataSourceConfig dsc = new DataSourceConfig();
-        dsc.setUrl("jdbc:mysql://192.168.107.133:3306/minion_demo?useUnicode=true&useSSL=false&characterEncoding=utf8");
+        dsc.setUrl("jdbc:mysql://localhost:3306/minion_demo?useUnicode=true&useSSL=false&characterEncoding=utf8");
         dsc.setDriverName("com.mysql.cj.jdbc.Driver");
-        dsc.setUsername("dhb");
-        dsc.setPassword("wocaoni");
+        dsc.setUsername("root");
+        dsc.setPassword("root");
         mpg.setDataSource(dsc);
 
         // 包配置
@@ -45,7 +46,13 @@ public class ConsoleMinionGenerator {
         TemplateConfig templateConfig = MinionGeneratorConfig.templateConfig();
         mpg.setTemplate(templateConfig);
         // 策略配置
-        StrategyConfig strategy = MinionGeneratorConfig.strategyConfig();
+        MinionStrategyConfig strategy = MinionGeneratorConfig.strategyConfig();
+        // start 如果字段包含create_time、update_time、create_uid、update_uid，可以设置Entity父类为BaseEntity
+        strategy.setSuperEntityClass("cn.dhbin.minion.core.common.entity.BaseEntity");
+        strategy.setSuperEntityColumns("create_time", "update_time", "create_uid", "update_uid");
+        // end
+        // 使用Spring Security注解鉴权
+        strategy.setSpringSecurityAnnotation(true);
         strategy.setInclude(scanner("表名").split(","));
         mpg.setStrategy(strategy);
         mpg.setTemplateEngine(new MinionVelocityTemplateEngine());
