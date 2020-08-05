@@ -1,0 +1,7 @@
+dependencies {
+    implementation "${lib['spring-boot-starter']}"
+    implementation "${lib['mybatis-plus-generator']}"
+    implementation "${lib['velocity']}"
+    implementation "${lib['hutool']}"
+    testImplementation "${lib['mysql-connector']}"
+}

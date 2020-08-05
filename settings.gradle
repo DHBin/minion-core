@@ -1,0 +1,10 @@
+
+rootProject.name = 'minion-core'
+
+include(':minion-core-restful')
+include(':minion-core-tool')
+include(':minion-core-mybatis')
+include(':minion-core-generate')
+include(':minion-core-common')
+include(':minion-core-swagger')
+include(':minion-core-log')

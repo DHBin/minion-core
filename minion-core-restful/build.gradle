@@ -1,0 +1,10 @@
+
+dependencies {
+    implementation "${lib['spring-boot-starter']}"
+    implementation "${lib['spring-boot-starter-web']}"
+    implementation "${lib['spring-boot-starter-undertow']}"
+    implementation "${lib['hutool']}"
+    implementation project(':minion-core-tool')
+    implementation project(':minion-core-common')
+    implementation "${lib['validation-api']}"
+}

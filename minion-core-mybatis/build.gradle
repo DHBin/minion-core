@@ -1,0 +1,7 @@
+dependencies {
+    implementation "${lib['mybatis-plus-boot-starter']}"
+    implementation "${lib['hutool']}"
+    implementation project(':minion-core-tool')
+    implementation project(':minion-core-common')
+    implementation "${lib['jackson-annotations']}"
+}

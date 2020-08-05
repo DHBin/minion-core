@@ -1,6 +1,15 @@
 .idea
 *.iml
 
-### Maven template
-target/
-.mvn
+# Eclipse project files
+**/.classpath
+**/.project
+**/.settings/
+**/bin/
+
+# gradle
+**/build
+.gradle
+
+# MacOS
+.DS_Store

@@ -1,0 +1,74 @@
+allprojects {
+    group = 'cn.dhbin'
+    version = '1.0.1'
+}
+
+ext {
+    configuration = [
+            javaVersion = JavaVersion.VERSION_1_8
+    ]
+
+    libraries = [
+            springBootVersion = '2.3.1.RELEASE',
+            lombokVersion = '1.18.12',
+            hutoolVersion = '5.2.4',
+            modelMapperVersion = '2.3.6',
+            knife4jVersion = '2.0.4',
+            validationApiVersion = '2.0.1.Final',
+            mybatisPlusVersion = '3.3.1',
+            velocityVersion = '2.2',
+            mysqlConnectorVersion = '8.0.20',
+            jacksonVersion = '2.11.0'
+    ]
+
+    lib = [
+            "spring-boot-configuration-processor": "org.springframework.boot:spring-boot-configuration-processor:${springBootVersion}",
+            "spring-boot-starter"                : "org.springframework.boot:spring-boot-starter:${springBootVersion}",
+            "spring-boot-starter-web"            : "org.springframework.boot:spring-boot-starter-web:${springBootVersion}",
+            "spring-boot-starter-undertow"       : "org.springframework.boot:spring-boot-starter-undertow:${springBootVersion}",
+            "validation-api"                     : "javax.validation:validation-api:${validationApiVersion}",
+            "lombok"                             : "org.projectlombok:lombok:${lombokVersion}",
+            "hutool"                             : "cn.hutool:hutool-all:${hutoolVersion}",
+            "modelMapper"                        : "org.modelmapper:modelmapper:${modelMapperVersion}",
+            "knife4j"                            : "com.github.xiaoymin:knife4j-micro-spring-boot-starter:${knife4jVersion}",
+            "mybatis-plus-generator"             : "com.baomidou:mybatis-plus-generator:${mybatisPlusVersion}",
+            "mybatis-plus-boot-starter"          : "com.baomidou:mybatis-plus-boot-starter:${mybatisPlusVersion}",
+            "mybatis-plus-annotation"            : "com.baomidou:mybatis-plus-annotation:${mybatisPlusVersion}",
+            "velocity"                           : "org.apache.velocity:velocity-engine-core:${velocityVersion}",
+            "mysql-connector"                    : "mysql:mysql-connector-java:${mysqlConnectorVersion}",
+            "jackson-annotations"                : "com.fasterxml.jackson.core:jackson-annotations:${jacksonVersion}",
+    ]
+}
+
+subprojects {
+
+    apply plugin: 'java-library'
+    apply plugin: 'maven-publish'
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+
+    dependencies {
+        compileOnly "${lib['lombok']}"
+        compileOnly "${lib['spring-boot-configuration-processor']}"
+        annotationProcessor "${lib['lombok']}"
+
+    }
+
+    sourceCompatibility = "${javaVersion}"
+    targetCompatibility = "${javaVersion}"
+
+    publishing {
+        publications {
+            maven(MavenPublication) {
+                from(components.java)
+            }
+        }
+    }
+
+    tasks.withType(JavaCompile) {
+        options.encoding = 'UTF-8'
+    }
+}

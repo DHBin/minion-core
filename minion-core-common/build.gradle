@@ -1,0 +1,4 @@
+dependencies {
+    implementation project(':minion-core-tool')
+    compileOnly "${lib['mybatis-plus-annotation']}"
+}

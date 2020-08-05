@@ -1,0 +1,4 @@
+dependencies {
+    implementation "${lib['hutool']}"
+    implementation "${lib['modelMapper']}"
+}
