@@ -3,6 +3,7 @@ package cn.dhbin.minion.core.swagger.config;
 import com.github.xiaoymin.knife4j.spring.annotations.EnableKnife4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -23,15 +24,12 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 @EnableKnife4j
 @ConditionalOnProperty(name = "swagger.enabled", matchIfMissing = true)
+@EnableConfigurationProperties(SwaggerProperties.class)
 public class SwaggerAutoConfiguration {
+
 
     @Bean
     @ConditionalOnMissingBean
-    public SwaggerProperties swaggerProperties() {
-        return new SwaggerProperties();
-    }
-
-    @Bean
     public Docket groupDocket(ApiInfo apiInfo, SwaggerProperties swaggerProperties) {
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo)
@@ -42,6 +40,7 @@ public class SwaggerAutoConfiguration {
     }
 
     @Bean
+    @ConditionalOnMissingBean
     public ApiInfo groupInfo(SwaggerProperties swaggerProperties) {
         return new ApiInfoBuilder()
                 .title(swaggerProperties.getTitle())
