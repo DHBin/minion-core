@@ -8,3 +8,5 @@ include(':minion-core-generate')
 include(':minion-core-common')
 include(':minion-core-swagger')
 include(':minion-core-log')
+include 'minion-core-swagger-plugin'
+

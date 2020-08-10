@@ -10,6 +10,7 @@ ext {
 
     libraries = [
             springBootVersion = '2.3.1.RELEASE',
+            springVersion = '5.2.8.RELEASE',
             lombokVersion = '1.18.12',
             hutoolVersion = '5.2.4',
             modelMapperVersion = '2.3.6',
@@ -18,7 +19,8 @@ ext {
             mybatisPlusVersion = '3.3.1',
             velocityVersion = '2.2',
             mysqlConnectorVersion = '8.0.20',
-            jacksonVersion = '2.11.0'
+            jacksonVersion = '2.11.0',
+            autoServiceVersion = '1.0-rc7'
     ]
 
     lib = [
@@ -37,6 +39,7 @@ ext {
             "velocity"                           : "org.apache.velocity:velocity-engine-core:${velocityVersion}",
             "mysql-connector"                    : "mysql:mysql-connector-java:${mysqlConnectorVersion}",
             "jackson-annotations"                : "com.fasterxml.jackson.core:jackson-annotations:${jacksonVersion}",
+            "auto-service": "com.google.auto.service:auto-service:${autoServiceVersion}"
     ]
 }
 
