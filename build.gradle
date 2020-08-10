@@ -52,7 +52,7 @@ subprojects {
 
     dependencies {
         compileOnly "${lib['lombok']}"
-        compileOnly "${lib['spring-boot-configuration-processor']}"
+        annotationProcessor "${lib['spring-boot-configuration-processor']}"
         annotationProcessor "${lib['lombok']}"
 
     }

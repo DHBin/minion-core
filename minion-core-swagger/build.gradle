@@ -1,4 +1,4 @@
 dependencies {
-    implementation "${lib['knife4j']}"
+    api "${lib['knife4j']}"
     implementation "${lib['spring-boot-starter']}"
 }
