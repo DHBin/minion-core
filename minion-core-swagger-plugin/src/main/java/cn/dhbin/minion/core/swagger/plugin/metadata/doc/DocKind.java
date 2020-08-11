@@ -15,7 +15,7 @@ public enum DocKind {
      */
     AUTHOR,
     /**
-     * {@linkplain @code}
+     * {@literal @code}
      */
     CODE,
     /**
@@ -36,7 +36,7 @@ public enum DocKind {
      */
     DOC_ROOT,
     /**
-     * A tree node for the end of an HTML element. like </p>
+     * A tree node for the end of an HTML element. like {@literal </p>}
      */
     END_ELEMENT,
     /**
