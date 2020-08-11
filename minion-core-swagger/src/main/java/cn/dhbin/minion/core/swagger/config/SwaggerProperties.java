@@ -42,7 +42,7 @@ public class SwaggerProperties {
     /**
      * basePackage
      */
-    private String basePackage;
+    private String basePackage = "";
 
     /**
      * 排除路径
