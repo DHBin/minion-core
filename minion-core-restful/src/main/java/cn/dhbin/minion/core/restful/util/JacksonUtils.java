@@ -101,6 +101,8 @@ public class JacksonUtils {
 
     /**
      * 包装 MappingJackson2HttpMessageConverter
+     *
+     * @return HttpMessageConverter
      */
     public static Consumer<HttpMessageConverter<?>> wrapperObjectMapper() {
         return converter -> {

@@ -23,7 +23,7 @@ public interface IPageModel<T> {
     Integer getCurrent();
 
     /**
-     * model -> T
+     * model to T
      *
      * @return 转换类型
      */

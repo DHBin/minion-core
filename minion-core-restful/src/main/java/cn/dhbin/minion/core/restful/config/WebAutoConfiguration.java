@@ -53,7 +53,8 @@ public class WebAutoConfiguration implements WebMvcConfigurer {
     /**
      * 请求包装器
      *
-     * @param logHandler 日志处理类
+     * @param logHandler          日志处理类
+     * @param logConfigProperties logConfigProperties
      * @return WrapperRequestFilter
      */
     @Bean

@@ -16,38 +16,31 @@ import java.util.Objects;
 public class ApiAssert {
 
 
-    /**
-     * obj1 eq obj2
-     *
-     * @param obj1
-     * @param obj2
-     * @param errorCode
-     */
-    public static void equals(IErrorCode errorCode, Object obj1, Object obj2) {
+    public static void equals(IErrorCode<?> errorCode, Object obj1, Object obj2) {
         if (!Objects.equals(obj1, obj2)) {
             failure(errorCode);
         }
     }
 
-    public static void isTrue(IErrorCode errorCode, boolean condition) {
+    public static void isTrue(IErrorCode<?> errorCode, boolean condition) {
         if (!condition) {
             failure(errorCode);
         }
     }
 
-    public static void isFalse(IErrorCode errorCode, boolean condition) {
+    public static void isFalse(IErrorCode<?> errorCode, boolean condition) {
         if (condition) {
             failure(errorCode);
         }
     }
 
-    public static void isNull(IErrorCode errorCode, Object... conditions) {
+    public static void isNull(IErrorCode<?> errorCode, Object... conditions) {
         if (ObjectUtils.allNotNull(conditions)) {
             failure(errorCode);
         }
     }
 
-    public static void notNull(IErrorCode errorCode, Object... conditions) {
+    public static void notNull(IErrorCode<?> errorCode, Object... conditions) {
         if (!ObjectUtils.allNotNull(conditions)) {
             failure(errorCode);
         }
@@ -60,11 +53,11 @@ public class ApiAssert {
      *
      * @param errorCode 异常错误码
      */
-    public static void failure(IErrorCode errorCode) {
+    public static void failure(IErrorCode<?> errorCode) {
         throw new ApiException(errorCode);
     }
 
-    public static void notEmpty(IErrorCode errorCode, Object[] array) {
+    public static void notEmpty(IErrorCode<?> errorCode, Object[] array) {
         if (ObjectUtils.isEmpty(array)) {
             failure(errorCode);
         }
@@ -78,11 +71,11 @@ public class ApiAssert {
      * Assert.noNullElements(array, &quot;The array must have non-null elements&quot;);
      * </pre>
      *
-     * @param array         the array to check
+     * @param array     the array to check
      * @param errorCode the exception message to use if the assertion fails
      * @throws ApiException if the object array contains a {@code null} element
      */
-    public static void noNullElements(IErrorCode errorCode, Object[] array) {
+    public static void noNullElements(IErrorCode<?> errorCode, Object[] array) {
         if (array != null) {
             for (Object element : array) {
                 if (element == null) {
@@ -100,11 +93,11 @@ public class ApiAssert {
      * Assert.notEmpty(collection, &quot;Collection must have elements&quot;);
      * </pre>
      *
-     * @param collection    the collection to check
-     * @param errorCode the exception message to use if the assertion fails
+     * @param collection the collection to check
+     * @param errorCode  the exception message to use if the assertion fails
      * @throws ApiException if the collection is {@code null} or has no elements
      */
-    public static void notEmpty(IErrorCode errorCode, Collection<?> collection) {
+    public static void notEmpty(IErrorCode<?> errorCode, Collection<?> collection) {
         if (CollUtil.isEmpty(collection)) {
             failure(errorCode);
         }
@@ -118,7 +111,7 @@ public class ApiAssert {
      * Assert.notEmpty(map, &quot;Map must have entries&quot;);
      * </pre>
      *
-     * @param map           the map to check
+     * @param map       the map to check
      * @param errorCode the exception message to use if the assertion fails
      * @throws ApiException if the map is {@code null} or has no entries
      */
@@ -136,8 +129,8 @@ public class ApiAssert {
      * Assert.notEmpty(collection, &quot;Collection must have elements&quot;);
      * </pre>
      *
-     * @param collection    the collection to check
-     * @param errorCode the exception message to use if the assertion fails
+     * @param collection the collection to check
+     * @param errorCode  the exception message to use if the assertion fails
      * @throws cn.dhbin.minion.core.restful.exception.ApiException if the collection is {@code null} or has no elements
      */
     public static void isEmpty(IErrorCode errorCode, Collection<?> collection) {
@@ -154,7 +147,7 @@ public class ApiAssert {
      * Assert.notEmpty(map, &quot;Map must have entries&quot;);
      * </pre>
      *
-     * @param map           the map to check
+     * @param map       the map to check
      * @param errorCode the exception message to use if the assertion fails
      * @throws ApiException if the map is {@code null} or has no entries
      */

@@ -34,6 +34,7 @@ public class ApiResponse<T> implements Serializable {
      * 成功
      *
      * @param object 数据
+     * @param <T>    数据类型
      * @return 响应模型
      */
     public static <T> SuccessResponse<T> success(T object) {

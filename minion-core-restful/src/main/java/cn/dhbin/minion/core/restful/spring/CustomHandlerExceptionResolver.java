@@ -307,6 +307,7 @@ public class CustomHandlerExceptionResolver extends AbstractHandlerExceptionReso
      * an {@link RequestBody} or {@link RequestPart} argument fails validation.
      * An HTTP 400 error is sent back to the client.
      *
+     * @param ex       ex
      * @param request  current HTTP request
      * @param response current HTTP response
      */
@@ -321,6 +322,7 @@ public class CustomHandlerExceptionResolver extends AbstractHandlerExceptionReso
      * {@link MultipartFile}, or a {@code javax.servlet.http.Part} argument is
      * required but is missing. An HTTP 400 error is sent back to the client.
      *
+     * @param ex       ex
      * @param request  current HTTP request
      * @param response current HTTP response
      */
@@ -335,6 +337,7 @@ public class CustomHandlerExceptionResolver extends AbstractHandlerExceptionReso
      * another method argument of type {@link BindingResult}. By default, an
      * HTTP 400 error is sent back to the client.
      *
+     * @param ex       ex
      * @param request  current HTTP request
      * @param response current HTTP response
      */
@@ -402,6 +405,10 @@ public class CustomHandlerExceptionResolver extends AbstractHandlerExceptionReso
     /**
      * Invoked to send a server error. Sets the status to 500 and also sets the
      * request attribute "javax.servlet.error.exception" to the Exception.
+     *
+     * @param ex       ex
+     * @param request  request
+     * @param response response
      */
     protected void sendServerError(Exception ex, HttpServletRequest request, HttpServletResponse response) {
         ResponseUtils.sendFail(request, response, ErrorCodeEnum.INTERNAL_SERVER_ERROR, ex);

@@ -52,6 +52,8 @@ public class ApplicationUtils {
 
     /**
      * 获取ApplicationContext
+     *
+     * @return ApplicationContext
      */
     public static ApplicationContext getApplicationContext() {
         return APPLICATION_CONTEXT;
@@ -141,6 +143,7 @@ public class ApplicationUtils {
      *
      * @param name bean名称
      * @return Class类型
+     * @param <T> Class类型
      */
     @SuppressWarnings("unchecked")
     public static <T> Class<T> getType(String name) {

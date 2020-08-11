@@ -13,8 +13,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * 拓展SpringValidatorAdapter以便于校验List<T>类型数据
- * {@link org.springframework.validation.beanvalidation.SpringValidatorAdapter
+ * 拓展SpringValidatorAdapter以便于校验{@literal List<T>}类型数据
+ * {@link org.springframework.validation.beanvalidation.SpringValidatorAdapter}
  *
  * @author donghaibin
  * @date 2019-08-10

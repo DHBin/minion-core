@@ -51,6 +51,8 @@ public class BeanConverter {
      *
      * @param clazz the clazz
      * @param list  the list
+     * @param <T>   目标对象类型
+     * @return 转换后的目标对象
      */
     public static <T> List<T> convert(Class<T> clazz, List<?> list) {
         return CollUtil.isEmpty(list) ? Collections.emptyList() : list.stream().map(e -> convert(clazz, e)).collect(Collectors.toList());
@@ -61,6 +63,7 @@ public class BeanConverter {
      *
      * @param targetClass 目标对象
      * @param source      源对象
+     * @param <T>         目标对象类型
      * @return 转换后的目标对象
      */
     public static <T> T convert(Class<T> targetClass, Object source) {
