@@ -1,3 +1,5 @@
+import java.text.SimpleDateFormat
+
 allprojects {
     group = 'cn.dhbin'
     version = '1.0.1'
@@ -39,7 +41,7 @@ ext {
             "velocity"                           : "org.apache.velocity:velocity-engine-core:${velocityVersion}",
             "mysql-connector"                    : "mysql:mysql-connector-java:${mysqlConnectorVersion}",
             "jackson-annotations"                : "com.fasterxml.jackson.core:jackson-annotations:${jacksonVersion}",
-            "auto-service": "com.google.auto.service:auto-service:${autoServiceVersion}"
+            "auto-service"                       : "com.google.auto.service:auto-service:${autoServiceVersion}"
     ]
 }
 
@@ -47,6 +49,7 @@ subprojects {
 
     apply plugin: 'java-library'
     apply plugin: 'maven-publish'
+    apply plugin: 'signing'
 
     repositories {
         mavenLocal()
@@ -63,15 +66,108 @@ subprojects {
     sourceCompatibility = "${javaVersion}"
     targetCompatibility = "${javaVersion}"
 
-    publishing {
-        publications {
-            maven(MavenPublication) {
-                from(components.java)
+    tasks.withType(JavaCompile) {
+        options.encoding = 'UTF-8'
+    }
+
+    jar {
+        afterEvaluate {
+            manifest {
+                attributes 'Implementation-Version': archiveVersion
+                attributes 'Built-Gradle': gradle.gradleVersion
+                attributes 'Build-OS': System.getProperty("os.name")
+                attributes 'Built-By': System.getProperty("user.name")
+                attributes 'Build-Jdk': System.getProperty("java.version")
+                attributes 'Build-Timestamp': new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())
             }
         }
     }
 
-    tasks.withType(JavaCompile) {
-        options.encoding = 'UTF-8'
+    javadoc {
+        afterEvaluate {
+            configure(options) {
+                encoding "UTF-8"
+                charSet 'UTF-8'
+                author true
+                version true
+                failOnError false
+                links "http://docs.oracle.com/javase/8/docs/api"
+                options.tags = ["date"]
+            }
+        }
     }
+
+    task sourcesJar(type: Jar) {
+        archiveClassifier = 'sources'
+        from sourceSets.main.allSource
+    }
+
+    task javadocJar(type: Jar) {
+        archiveClassifier = 'javadoc'
+        from javadoc
+    }
+
+    tasks.whenTaskAdded { task ->
+        if (task.name.contains('signMavenJavaPublication')) {
+            task.enabled = new File(project.property('signing.secretKeyRingFile') as String).isFile()
+        }
+    }
+
+    publishing {
+        repositories {
+            maven {
+                def userName = System.getenv("un")
+                def passWord = System.getenv("ps")
+                def releasesRepoUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+                def snapshotsRepoUrl = "https://oss.sonatype.org/content/repositories/snapshots/"
+                url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+
+                credentials {
+                    username userName
+                    password passWord
+                }
+            }
+        }
+        publications {
+
+            mavenJava(MavenPublication) {
+                from components.java
+
+                artifact sourcesJar
+                artifact javadocJar
+
+                pom {
+                    name = 'minion-core'
+                    description = 'web开发工具包'
+                    url = 'https://github.com/DHBin/minion-core'
+
+                    scm {
+                        connection = 'scm:git@github.com:Codearte/gradle-nexus-staging-plugin.git'
+                        developerConnection = 'scm:git@github.com:Codearte/gradle-nexus-staging-plugin.git'
+                        url = 'https://github.com/DHBin/minion-core'
+                    }
+
+                    licenses {
+                        license {
+                            name = 'The Apache License, Version 2.0'
+                            url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                        }
+                    }
+
+                    developers {
+                        developer {
+                            id = 'DHB'
+                            name = 'dhbin'
+                            email = 'xx158@qq.com'
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    signing {
+        sign publishing.publications.mavenJava
+    }
+
 }
