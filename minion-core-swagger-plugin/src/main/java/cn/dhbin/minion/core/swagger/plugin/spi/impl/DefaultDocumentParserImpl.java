@@ -95,12 +95,9 @@ public class DefaultDocumentParserImpl implements DocumentParser {
         if (ObjectUtil.isNull(docInfo)) {
             return null;
         }
-        List<Doc> docs = new ArrayList<>();
-        docs.addAll(docInfo.getFirstSentence());
-        docs.addAll(docInfo.getBody());
 
         ApiModelPropertyMetadataBuilder builder = ApiModelPropertyMetadataBuilder.anApiModelPropertyMetadata();
-        builder.value(docs.stream().map(Doc::getContent).collect(Collectors.joining()));
+        builder.value(docInfo.getFirstSentence().stream().map(Doc::getContent).collect(Collectors.joining()));
 
         return builder.build();
     }
