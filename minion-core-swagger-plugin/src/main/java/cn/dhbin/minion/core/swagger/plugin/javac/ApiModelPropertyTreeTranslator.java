@@ -8,6 +8,8 @@ import cn.dhbin.minion.core.swagger.plugin.spi.DocumentParser;
 import cn.dhbin.minion.core.swagger.plugin.util.Services;
 import cn.hutool.core.util.ObjectUtil;
 import com.sun.source.doctree.DocCommentTree;
+import com.sun.source.doctree.DocTree;
+import com.sun.source.doctree.UnknownBlockTagTree;
 import com.sun.source.tree.Tree;
 import com.sun.tools.javac.processing.JavacProcessingEnvironment;
 import com.sun.tools.javac.tree.JCTree;
@@ -59,10 +61,34 @@ public class ApiModelPropertyTreeTranslator extends AbstractConditionTreeTransla
     @Override
     public boolean test(JCTree jcTree) {
         try {
-            return jcTree != null && jcTree.getKind() != null && jcTree.getKind().equals(Tree.Kind.VARIABLE);
+            boolean isVariable = jcTree != null && jcTree.getKind() != null && jcTree.getKind().equals(Tree.Kind.VARIABLE);
+            DocCommentTree classDocCommentTree = getDocCommentTree(element);
+            return isVariable && isApiModel(classDocCommentTree);
         } catch (AssertionError e) {
+            // jcTree.getKind可能会触发这个异常
             return false;
         }
+    }
+
+    /**
+     * 判断类上是否包含apiModel注解
+     *
+     * @param classDocCommentTree doc tree
+     * @return 类上是否包含apiModel注解
+     */
+    private boolean isApiModel(DocCommentTree classDocCommentTree) {
+        if (classDocCommentTree == null) {
+            return false;
+        }
+        for (DocTree blockTag : classDocCommentTree.getBlockTags()) {
+            if (blockTag instanceof UnknownBlockTagTree) {
+                UnknownBlockTagTree unknownBlockTagTree = (UnknownBlockTagTree) blockTag;
+                if (Constant.API_MODEL_TAG.equals(unknownBlockTagTree.getTagName())) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     private boolean existApiModelPropertyAnnotation(JCTree.JCVariableDecl tree) {
