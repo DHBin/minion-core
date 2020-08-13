@@ -99,6 +99,19 @@ public class AbstractTreeTranslator extends TreeTranslator {
     }
 
     /**
+     * 创建类JCFieldAccess
+     *
+     * @param classPath 类路径 如：java.lang.String
+     * @return JCFieldAccess
+     */
+    protected JCTree.JCFieldAccess createClassFieldAccess(String classPath) {
+        Name classSuffix = names.fromString("class");
+        TypeElement typeElement = elements.getTypeElement(classPath);
+        TypeMirror typeMirror = typeElement.asType();
+        return treeMaker.Select(treeMaker.Type((Type) typeMirror), classSuffix);
+    }
+
+    /**
      * 创建 数组 语法树
      * <p>
      * 例子：

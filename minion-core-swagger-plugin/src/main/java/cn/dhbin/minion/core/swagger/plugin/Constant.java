@@ -43,6 +43,11 @@ public interface Constant {
     String SWAGGER_AUTHORIZATION_CLASS_NAME = "io.swagger.annotations.Authorization";
 
     /**
+     * swagger {@literal @ApiParam}
+     */
+    String SWAGGER_API_PARAM_CLASS_NAME = "io.swagger.annotations.ApiParam";
+
+    /**
      * spring {@literal @RequestMapping}
      */
     String SPRING_REQUEST_MAPPING = "org.springframework.web.bind.annotation.RequestMapping";
@@ -77,6 +82,11 @@ public interface Constant {
      * Spring @Controller
      */
     String SPRING_CONTROLLER_CLASS_NAME = "org.springframework.stereotype.Controller";
+
+    /**
+     * Spring @RequestBody
+     */
+    String SPRING_REQUEST_BODY_CLASS_NAME = "org.springframework.web.bind.annotation.RequestBody";
 
 
     /**

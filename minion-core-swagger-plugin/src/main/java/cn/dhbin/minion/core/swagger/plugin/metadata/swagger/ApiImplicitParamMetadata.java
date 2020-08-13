@@ -22,6 +22,10 @@ public class ApiImplicitParamMetadata {
 
     private String dataType;
 
+    /**
+     * 使用dataType
+     */
+    @Deprecated
     private Class<?> dataTypeClass;
 
     private String paramType;

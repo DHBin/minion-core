@@ -10,6 +10,7 @@ import cn.hutool.core.util.StrUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -50,7 +51,13 @@ public class DefaultDocumentParserImpl implements DocumentParser {
         }
         ApiOperationMetadataBuilder builder = ApiOperationMetadataBuilder.anApiOperationMetadata();
         List<String> apiNotes = resolveApiNotes(docInfo.getTags());
-        builder.value(String.join(StrUtil.EMPTY, apiNotes));
+        String value = String.join(StrUtil.EMPTY, apiNotes);
+        // 如果apiNote为空，取首句
+        if (StrUtil.isNotBlank(value)) {
+            builder.value(value);
+        } else {
+            builder.value(docInfo.getFirstSentence().stream().map(Doc::getContent).collect(Collectors.joining(StrUtil.EMPTY)));
+        }
         List<Doc> docs = new ArrayList<>();
         docs.addAll(docInfo.getFirstSentence());
         docs.addAll(docInfo.getBody());
@@ -66,12 +73,17 @@ public class DefaultDocumentParserImpl implements DocumentParser {
         List<ParamDoc> paramDocs = resolveParams(docInfo.getTags());
         return paramDocs.stream()
                 .map(paramDoc -> {
+                    // requestBody不加进ApiImplicitParams
+                    if (paramDoc.getAnnotations().contains(Constant.SPRING_REQUEST_BODY_CLASS_NAME)) {
+                        return null;
+                    }
                     ApiImplicitParamMetadataBuilder builder = ApiImplicitParamMetadataBuilder.anApiImplicitParamMetadata();
                     builder.name(paramDoc.getParam())
                             .value(paramDoc.getContent())
                             .dataType(paramDoc.getType());
                     return builder.build();
                 })
+                .filter(Objects::nonNull)
                 .collect(Collectors.toList());
     }
 

@@ -16,6 +16,10 @@ public final class ApiImplicitParamMetadataBuilder {
     private String access;
     private Boolean allowMultiple;
     private String dataType;
+    /**
+     * 使用dataType
+     */
+    @Deprecated
     private Class<?> dataTypeClass;
     private String paramType;
     private String example;

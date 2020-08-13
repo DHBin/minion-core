@@ -3,6 +3,7 @@ package cn.dhbin.minion.core.swagger.plugin.javac;
 import cn.dhbin.minion.core.swagger.plugin.Constant;
 import cn.dhbin.minion.core.swagger.plugin.adapter.impl.ComposeAdapterImpl;
 import cn.dhbin.minion.core.swagger.plugin.metadata.doc.DocInfo;
+import cn.dhbin.minion.core.swagger.plugin.metadata.doc.ParamDoc;
 import cn.dhbin.minion.core.swagger.plugin.metadata.swagger.ApiImplicitParamMetadata;
 import cn.dhbin.minion.core.swagger.plugin.metadata.swagger.ApiOperationMetadata;
 import cn.dhbin.minion.core.swagger.plugin.spi.DocumentParser;
@@ -33,7 +34,7 @@ public class MappingTreeTranslator extends AbstractConditionTreeTranslator {
 
     private final DocumentParser documentParser = Services.getDocumentParser();
 
-    private final com.sun.tools.javac.util.List<String> mappingClassStr = com.sun.tools.javac.util.List.of(
+    private final List<String> mappingClassStr = List.of(
             Constant.SPRING_REQUEST_MAPPING,
             Constant.SPRING_GET_MAPPING,
             Constant.SPRING_POST_MAPPING,
@@ -43,6 +44,16 @@ public class MappingTreeTranslator extends AbstractConditionTreeTranslator {
     );
 
     private static final Map<String, String> TYPE_NAME_LOOKUP = new HashMap<>();
+
+    private static final List<String> BASIC_TYPE = List.of(
+            Long.TYPE.getName(),
+            Short.TYPE.getName(),
+            Integer.TYPE.getName(),
+            Double.TYPE.getName(),
+            Float.TYPE.getName(),
+            Byte.TYPE.getName(),
+            Boolean.TYPE.getName()
+    );
 
     public MappingTreeTranslator(JavacProcessingEnvironment environment, Element element) {
         super(environment, element);
@@ -89,7 +100,24 @@ public class MappingTreeTranslator extends AbstractConditionTreeTranslator {
         if (!existApiImplicitParamsAnnotation(methodDecl)) {
             addApiImplicitParams(methodDecl, docInfo);
         }
+        // 处理@RequestBody
+        addApiParam(methodDecl, docInfo);
         return tree;
+    }
+
+    private void addApiParam(JCTree.JCMethodDecl methodDecl, DocInfo docInfo) {
+        docInfo.getTags().stream()
+                .filter(doc -> (doc instanceof ParamDoc && ((ParamDoc) doc).getAnnotations().contains(Constant.SPRING_REQUEST_BODY_CLASS_NAME)))
+                .map(doc -> (ParamDoc) doc)
+                .forEach(paramDoc -> {
+                    for (JCTree.JCVariableDecl parameter : methodDecl.getParameters()) {
+                        if (paramDoc.getParam().equals(parameter.getName().toString())) {
+                            JCTree.JCAssign valueAssign = createAssign("value", createLiteral(paramDoc.getContent()));
+                            JCTree.JCAnnotation apiParamAnnotation = createAnnotation(Constant.SWAGGER_API_PARAM_CLASS_NAME, List.of(valueAssign));
+                            parameter.getModifiers().annotations = parameter.getModifiers().getAnnotations().prepend(apiParamAnnotation);
+                        }
+                    }
+                });
     }
 
     private boolean existApiOperationAnnotation(JCTree.JCMethodDecl tree) {
@@ -222,8 +250,14 @@ public class MappingTreeTranslator extends AbstractConditionTreeTranslator {
             expressionMap.put("allowMultiple", createLiteral(metadata.getAllowMultiple()));
         }
         if (ObjectUtil.isNotNull(metadata.getDataType())) {
-            String dataType = TYPE_NAME_LOOKUP.getOrDefault(metadata.getDataType(), "string");
-            expressionMap.put("dataType", createLiteral(dataType));
+            String dataType = TYPE_NAME_LOOKUP.get(metadata.getDataType());
+            if (dataType != null) {
+                expressionMap.put("dataType", createLiteral(dataType));
+            }
+            if (!BASIC_TYPE.contains(metadata.getDataType())) {
+                JCTree.JCFieldAccess classFieldAccess = createClassFieldAccess(metadata.getDataType());
+                expressionMap.put("dataTypeClass", classFieldAccess);
+            }
         }
         if (ObjectUtil.isNotNull(metadata.getParamType())) {
             expressionMap.put("paramType", createLiteral(metadata.getParamType()));
