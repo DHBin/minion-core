@@ -5,9 +5,8 @@ description 'Swagger 注解生成器'
 dependencies {
     compileOnly "${lib['auto-service']}"
     annotationProcessor "${lib['auto-service']}"
-    compile "org.springframework:spring-web:${springVersion}"
-
-    implementation "${lib['hutool']}"
+    implementation "org.springframework:spring-web:${springVersion}"
+    api "${lib['hutool']}"
 
     if (Float.valueOf(System.getProperty("java.specification.version")) < 9) {
         compile(files(((URLClassLoader) ToolProvider.getSystemToolClassLoader()).getURLs()))
