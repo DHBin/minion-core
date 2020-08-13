@@ -12,5 +12,8 @@ dependencies {
         compile(files(((URLClassLoader) ToolProvider.getSystemToolClassLoader()).getURLs()))
     }
 
-    testCompile group: 'junit', name: 'junit', version: '4.12'
+    testImplementation "${lib['swagger-annotations']}"
+    testImplementation "${lib['compile-testing']}"
+    testImplementation "${lib['junit-jupiter-api']}"
+    testRuntimeOnly "${lib['junit-jupiter-engine']}"
 }

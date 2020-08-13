@@ -22,7 +22,10 @@ ext {
             velocityVersion = '2.2',
             mysqlConnectorVersion = '8.0.20',
             jacksonVersion = '2.11.0',
-            autoServiceVersion = '1.0-rc7'
+            autoServiceVersion = '1.0-rc7',
+            swaggerAnnotationsVersion = '1.5.22',
+            junitVersion = '5.7.0-M1',
+            compileTestVersion = '0.18',
     ]
 
     lib = [
@@ -41,7 +44,12 @@ ext {
             "velocity"                           : "org.apache.velocity:velocity-engine-core:${velocityVersion}",
             "mysql-connector"                    : "mysql:mysql-connector-java:${mysqlConnectorVersion}",
             "jackson-annotations"                : "com.fasterxml.jackson.core:jackson-annotations:${jacksonVersion}",
-            "auto-service"                       : "com.google.auto.service:auto-service:${autoServiceVersion}"
+            "auto-service"                       : "com.google.auto.service:auto-service:${autoServiceVersion}",
+            "swagger-annotations"                : "io.swagger:swagger-annotations:${swaggerAnnotationsVersion}",
+
+            "compile-testing"                    : "com.google.testing.compile:compile-testing:${compileTestVersion}",
+            "junit-jupiter-api"                  : "org.junit.jupiter:junit-jupiter-api:${junitVersion}",
+            "junit-jupiter-engine"               : "org.junit.jupiter:junit-jupiter-engine:${junitVersion}"
     ]
 }
 
@@ -65,6 +73,10 @@ subprojects {
 
     sourceCompatibility = "${javaVersion}"
     targetCompatibility = "${javaVersion}"
+
+    test {
+        useJUnitPlatform()
+    }
 
     tasks.withType(JavaCompile) {
         options.encoding = 'UTF-8'
