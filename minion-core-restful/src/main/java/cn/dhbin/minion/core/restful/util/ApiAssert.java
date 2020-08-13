@@ -47,9 +47,7 @@ public class ApiAssert {
     }
 
     /**
-     * <p>
      * 失败结果
-     * </p>
      *
      * @param errorCode 异常错误码
      */
@@ -66,13 +64,13 @@ public class ApiAssert {
     /**
      * Assert that an array has no null elements. Note: Does not complain if the
      * array is empty!
-     * <p>
+     * <br>
      * <pre class="code">
      * Assert.noNullElements(array, &quot;The array must have non-null elements&quot;);
      * </pre>
      *
-     * @param array     the array to check
      * @param errorCode the exception message to use if the assertion fails
+     * @param array     the array to check
      * @throws ApiException if the object array contains a {@code null} element
      */
     public static void noNullElements(IErrorCode<?> errorCode, Object[] array) {
@@ -88,13 +86,13 @@ public class ApiAssert {
     /**
      * Assert that a collection has elements; that is, it must not be
      * {@code null} and must have at least one element.
-     * <p>
+     * <br>
      * <pre class="code">
      * Assert.notEmpty(collection, &quot;Collection must have elements&quot;);
      * </pre>
      *
-     * @param collection the collection to check
      * @param errorCode  the exception message to use if the assertion fails
+     * @param collection the collection to check
      * @throws ApiException if the collection is {@code null} or has no elements
      */
     public static void notEmpty(IErrorCode<?> errorCode, Collection<?> collection) {
@@ -106,16 +104,16 @@ public class ApiAssert {
     /**
      * Assert that a Map has entries; that is, it must not be {@code null} and
      * must have at least one entry.
-     * <p>
+     * <br>
      * <pre class="code">
      * Assert.notEmpty(map, &quot;Map must have entries&quot;);
      * </pre>
      *
-     * @param map       the map to check
      * @param errorCode the exception message to use if the assertion fails
+     * @param map       the map to check
      * @throws ApiException if the map is {@code null} or has no entries
      */
-    public static void notEmpty(IErrorCode errorCode, Map<?, ?> map) {
+    public static void notEmpty(IErrorCode<?> errorCode, Map<?, ?> map) {
         if (MapUtil.isEmpty(map)) {
             failure(errorCode);
         }
@@ -124,16 +122,16 @@ public class ApiAssert {
     /**
      * Assert that a collection has elements; that is, it must not be
      * {@code null} and must have at least one element.
-     * <p>
+     * <br>
      * <pre class="code">
      * Assert.notEmpty(collection, &quot;Collection must have elements&quot;);
      * </pre>
      *
-     * @param collection the collection to check
      * @param errorCode  the exception message to use if the assertion fails
+     * @param collection the collection to check
      * @throws cn.dhbin.minion.core.restful.exception.ApiException if the collection is {@code null} or has no elements
      */
-    public static void isEmpty(IErrorCode errorCode, Collection<?> collection) {
+    public static void isEmpty(IErrorCode<?> errorCode, Collection<?> collection) {
         if (CollUtil.isNotEmpty(collection)) {
             failure(errorCode);
         }
@@ -142,16 +140,16 @@ public class ApiAssert {
     /**
      * Assert that a Map has entries; that is, it must not be {@code null} and
      * must have at least one entry.
-     * <p>
+     * <br>
      * <pre class="code">
      * Assert.notEmpty(map, &quot;Map must have entries&quot;);
      * </pre>
      *
-     * @param map       the map to check
      * @param errorCode the exception message to use if the assertion fails
+     * @param map       the map to check
      * @throws ApiException if the map is {@code null} or has no entries
      */
-    public static void isEmpty(IErrorCode errorCode, Map<?, ?> map) {
+    public static void isEmpty(IErrorCode<?> errorCode, Map<?, ?> map) {
         if (CollUtil.isNotEmpty(map)) {
             failure(errorCode);
         }

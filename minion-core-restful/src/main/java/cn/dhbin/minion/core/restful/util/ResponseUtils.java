@@ -46,10 +46,11 @@ public class ResponseUtils {
     /**
      * 获取异常信息
      *
-     * @param exception 异常
+     * @param failResponseBuilder 异常响应创建者
+     * @param exception           异常
      * @return {@link FailResponse}
      */
-    public static FailResponse.FailResponseBuilder exceptionMsg(FailResponse.FailResponseBuilder failResponseBuilder, Exception exception) {
+    public static FailResponse.FailResponseBuilder<?> exceptionMsg(FailResponse.FailResponseBuilder<?> failResponseBuilder, Exception exception) {
         if (exception instanceof MethodArgumentNotValidException) {
             StringBuilder builder = new StringBuilder("校验失败:");
             List<ObjectError> allErrors = ((MethodArgumentNotValidException) exception).getBindingResult().getAllErrors();
@@ -109,6 +110,8 @@ public class ResponseUtils {
     /**
      * 获取Response
      *
+     * @param response  response
+     * @param errorCode errorCode
      * @return wrapper
      */
     public static ResponseWrapper getWrapper(HttpServletResponse response, IErrorCode<?> errorCode) {
