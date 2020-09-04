@@ -68,4 +68,13 @@ public interface DocumentParser {
         return null;
     }
 
+    /**
+     * 解析生成@ApiParam
+     *
+     * @param docInfo bean类的方法的注释信息
+     * @return {@link ApiParamMetadata}
+     */
+    default List<ApiParamMetadata> resolveApiParam(DocInfo docInfo) {
+        return null;
+    }
 }

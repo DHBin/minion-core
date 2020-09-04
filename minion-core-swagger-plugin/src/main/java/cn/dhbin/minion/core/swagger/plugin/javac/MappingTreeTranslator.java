@@ -6,6 +6,7 @@ import cn.dhbin.minion.core.swagger.plugin.metadata.doc.DocInfo;
 import cn.dhbin.minion.core.swagger.plugin.metadata.doc.ParamDoc;
 import cn.dhbin.minion.core.swagger.plugin.metadata.swagger.ApiImplicitParamMetadata;
 import cn.dhbin.minion.core.swagger.plugin.metadata.swagger.ApiOperationMetadata;
+import cn.dhbin.minion.core.swagger.plugin.metadata.swagger.ApiParamMetadata;
 import cn.dhbin.minion.core.swagger.plugin.spi.DocumentParser;
 import cn.dhbin.minion.core.swagger.plugin.util.Services;
 import cn.hutool.core.collection.CollUtil;
@@ -97,27 +98,29 @@ public class MappingTreeTranslator extends AbstractConditionTreeTranslator {
         if (!existApiOperationAnnotation(methodDecl)) {
             addApiOperation(methodDecl, docInfo);
         }
-        if (!existApiImplicitParamsAnnotation(methodDecl)) {
-            addApiImplicitParams(methodDecl, docInfo);
+        // 添加ApiParam的优先级比ApiImplicitParam高，添加ApiParam后不添加ApiImplicitParam
+        if (!addApiParam(methodDecl, docInfo)) {
+            if (!existApiImplicitParamsAnnotation(methodDecl)) {
+                addApiImplicitParams(methodDecl, docInfo);
+            }
         }
-        // 处理@RequestBody
-        addApiParam(methodDecl, docInfo);
         return tree;
     }
 
-    private void addApiParam(JCTree.JCMethodDecl methodDecl, DocInfo docInfo) {
-        docInfo.getTags().stream()
-                .filter(doc -> (doc instanceof ParamDoc && ((ParamDoc) doc).getAnnotations().contains(Constant.SPRING_REQUEST_BODY_CLASS_NAME)))
-                .map(doc -> (ParamDoc) doc)
-                .forEach(paramDoc -> {
-                    for (JCTree.JCVariableDecl parameter : methodDecl.getParameters()) {
-                        if (paramDoc.getParam().equals(parameter.getName().toString())) {
-                            JCTree.JCAssign valueAssign = createAssign("value", createLiteral(paramDoc.getContent()));
-                            JCTree.JCAnnotation apiParamAnnotation = createAnnotation(Constant.SWAGGER_API_PARAM_CLASS_NAME, List.of(valueAssign));
-                            parameter.getModifiers().annotations = parameter.getModifiers().getAnnotations().prepend(apiParamAnnotation);
-                        }
-                    }
-                });
+    private boolean addApiParam(JCTree.JCMethodDecl methodDecl, DocInfo docInfo) {
+        java.util.List<ApiParamMetadata> apiParamMetadataList = documentParser.resolveApiParam(docInfo);
+        if (CollUtil.isEmpty(apiParamMetadataList)) {
+            return false;
+        }
+        for (JCTree.JCVariableDecl variableDecl : methodDecl.params) {
+            for (ApiParamMetadata apiParamMetadata : apiParamMetadataList) {
+                if (apiParamMetadata.getName().equals(variableDecl.name.toString())) {
+                    JCTree.JCAnnotation jcAnnotation = createApiParam(apiParamMetadata);
+                    variableDecl.mods.annotations = variableDecl.mods.annotations.prepend(jcAnnotation);
+                }
+            }
+        }
+        return true;
     }
 
     private boolean existApiOperationAnnotation(JCTree.JCMethodDecl tree) {
@@ -282,5 +285,52 @@ public class MappingTreeTranslator extends AbstractConditionTreeTranslator {
         }
 
         return createAnnotation(Constant.SWAGGER_API_IMPLICIT_PARAM_CLASS_NAME, expressionMap);
+    }
+
+    private JCTree.JCAnnotation createApiParam(ApiParamMetadata metadata) {
+        Map<String, JCTree.JCExpression> expressionMap = new HashMap<>(16);
+        if (ObjectUtil.isNotNull(metadata.getName())) {
+            expressionMap.put("name", createLiteral(metadata.getName()));
+        }
+        if (ObjectUtil.isNotNull(metadata.getValue())) {
+            expressionMap.put("value", createLiteral(metadata.getValue()));
+        }
+        if (ObjectUtil.isNotNull(metadata.getDefaultValue())) {
+            expressionMap.put("defaultValue", createLiteral(metadata.getDefaultValue()));
+        }
+        if (ObjectUtil.isNotNull(metadata.getAllowableValues())) {
+            expressionMap.put("allowableValues", createLiteral(metadata.getAllowableValues()));
+        }
+        if (ObjectUtil.isNotNull(metadata.getRequired())) {
+            expressionMap.put("required", createLiteral(metadata.getRequired()));
+        }
+        if (ObjectUtil.isNotNull(metadata.getAccess())) {
+            expressionMap.put("access", createLiteral(metadata.getAccess()));
+        }
+        if (ObjectUtil.isNotNull(metadata.getAllowableValues())) {
+            expressionMap.put("allowMultiple", createLiteral(metadata.getAllowMultiple()));
+        }
+        if (ObjectUtil.isNotNull(metadata.getHidden())) {
+            expressionMap.put("hidden", createLiteral(metadata.getHidden()));
+        }
+        if (ObjectUtil.isNotNull(metadata.getExample())) {
+            expressionMap.put("example", createLiteral(metadata.getExample()));
+        }
+        if (ObjectUtil.isNotNull(metadata.getType())) {
+            expressionMap.put("type", createLiteral(metadata.getType()));
+        }
+        if (ObjectUtil.isNotNull(metadata.getFormat())) {
+            expressionMap.put("format", createLiteral(metadata.getFormat()));
+        }
+        if (ObjectUtil.isNotNull(metadata.getAllowEmptyValue())) {
+            expressionMap.put("allowEmptyValue", createLiteral(metadata.getAllowEmptyValue()));
+        }
+        if (ObjectUtil.isNotNull(metadata.getReadOnly())) {
+            expressionMap.put("readOnly", createLiteral(metadata.getReadOnly()));
+        }
+        if (ObjectUtil.isNotNull(metadata.getCollectionFormat())) {
+            expressionMap.put("collectionFormat", createLiteral(metadata.getCollectionFormat()));
+        }
+        return createAnnotation(Constant.SWAGGER_API_PARAM_CLASS_NAME, expressionMap);
     }
 }

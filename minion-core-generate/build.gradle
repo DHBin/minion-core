@@ -3,5 +3,8 @@ dependencies {
     implementation "${lib['mybatis-plus-generator']}"
     implementation "${lib['velocity']}"
     api project(':minion-core-tool')
+
     testImplementation "${lib['mysql-connector']}"
+    testImplementation "${lib['junit-jupiter-api']}"
+    testRuntimeOnly "${lib['junit-jupiter-engine']}"
 }

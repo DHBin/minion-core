@@ -114,6 +114,22 @@ public class DefaultDocumentParserImpl implements DocumentParser {
         return builder.build();
     }
 
+    @Override
+    public List<ApiParamMetadata> resolveApiParam(DocInfo docInfo) {
+        if (isNull(docInfo)) {
+            return null;
+        }
+        List<ParamDoc> paramDocs = resolveParams(docInfo.getTags());
+        return paramDocs.stream()
+                .map(paramDoc -> {
+                    ApiParamMetadataBuilder builder = ApiParamMetadataBuilder.anApiParamMetadata();
+                    builder.name(paramDoc.getParam())
+                            .value(paramDoc.getContent());
+                    return builder.build();
+                })
+                .collect(Collectors.toList());
+    }
+
     private List<String> resolveApiNotes(List<Doc> docs) {
         return docs.stream()
                 .filter(doc -> doc instanceof BlockDoc)
