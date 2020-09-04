@@ -51,6 +51,16 @@ ext {
             "junit-jupiter-api"                  : "org.junit.jupiter:junit-jupiter-api:${junitVersion}",
             "junit-jupiter-engine"               : "org.junit.jupiter:junit-jupiter-engine:${junitVersion}"
     ]
+
+    desc = [
+            "minion-core-common": "公共类",
+            "minion-core-generate": "代码生成器，支持生成前后端代码以及sql语句",
+            "minion-core-log": "日志",
+            "minion-core-mybatis": "mybatis扩展包",
+            "minion-core-restful": "restful api",
+            "minion-core-swagger": "快速集成swagger(knife4j)",
+            "minion-core-swagger-plugin": "javadoc注释生成Swagger注释"
+    ]
 }
 
 subprojects {
@@ -149,8 +159,8 @@ subprojects {
                 artifact javadocJar
 
                 pom {
-                    name = 'minion-core'
-                    description = 'web开发工具包'
+                    name = project.name
+                    description = "${desc[project.name]}"
                     url = 'https://github.com/DHBin/minion-core'
 
                     scm {
