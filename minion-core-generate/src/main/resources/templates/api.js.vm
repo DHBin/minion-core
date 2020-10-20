@@ -27,7 +27,7 @@ export const updateObj = (data) => {
 
 export const deleteObj = (id) => {
     return request({
-        url: baseUrl + '#if(${package.ModuleName})/${package.ModuleName}/#end/$!{firstLowerEntityName}/' + id,
+        url: baseUrl + '#if(${package.ModuleName})/${package.ModuleName}#end/$!{firstLowerEntityName}/' + id,
         method: 'delete'
     })
 };
